@@ -28,7 +28,7 @@ yarn add @reach/observe-rect
 ## Usage
 
 ```js
-import createRectObserver from "@reach/observe-rect";
+import observeRect from "@reach/observe-rect";
 
 let node = document.getElementById("some-node");
 
