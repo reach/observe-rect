@@ -11,7 +11,6 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@reach/createRectObserver"><img src="https://img.shields.io/npm/v/@reach/createRectObserver.svg?style=flat-square"></a>
   <a href="https://www.npmjs.com/package/@reach/createRectObserver"><img src="https://img.shields.io/npm/dm/@reach/createRectObserver.svg?style=flat-square"></a>
-  <a href="https://travis-ci.org/reach/createRectObserver"><img src="https://img.shields.io/travis/reach/createRectObserver/master.svg?style=flat-square"></a>
 </p>
 
 <p align="center">
