@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/png" href="https://reach.tech/favicon.png" />
+    <title>Reach observeRect</title>
+  </head>
+  <body style="
+    background: #eee;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  ">
+    <pre
+      id="log"
+      style="
+        background: #333;
+        color: white;
+        padding: 20px;
+        font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace;
+      "
+    >
+You need to run this from a file server.
+
+From the root of this project run
+
+  $ serve
+
+then open up <a style="color: white" href="http://localhost:5000/example.html">http://localhost:5000/example.html</a>.
+    </pre>
+
+    <button id="toggle">unobserve</button>
+    <br/><br/>
+
+    <textarea>Resize this</textarea>
+
+    <span
+      id="demo"
+      contenteditable
+      style="
+        display: inline-block;
+        padding: 10px;
+        border: solid 1px;
+        background: white;
+      "
+    >I am being measured, you can edit me!</span>
+
+  </body>
+  <script type="module">
+    import observeRect from './src/index.js'
+    let observer = observeRect(demo, (rect) => {
+      log.textContent = JSON.stringify(rect, null, 2)
+    })
+    
+    observer.observe()
+
+    let observing = true
+    toggle.addEventListener('click', () => {
+      if (observing) {
+        observer.unobserve()
+        toggle.textContent = 'observe'
+      } else {
+        observer.observe()
+        toggle.textContent = 'unobserve'
+      }
+      observing = !observing
+    })
+
+  </script>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "@reach/observe-rect",
+  "version": "1.0.0",
+  "description": "Observe the Rect of a DOM element",
+  "scripts": {
+    "build": "microbundle",
+    "start": "microbundle watch"
+  },
+  "files": [
+    "src",
+    "dist",
+    "README.md"
+  ],
+  "main": "dist/index.js",
+  "umd:main": "dist/index.umd.js",
+  "module": "dist/index.m.js",
+  "source": "src/index.js",
+  "repository": "https://github.com/reach/rect-observer",
+  "author": "Ryan Florence <@ryanflorence>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-jest": "^21.17.0",
+    "microbundle": "^0.4.4",
+    "serve": "^7.2.0"
+  },
+  "prettier": {}
+}
