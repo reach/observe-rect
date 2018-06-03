@@ -1,6 +1,6 @@
 {
   "name": "@reach/observe-rect",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Observe the Rect of a DOM element.",
   "scripts": {
     "build": "microbundle",
