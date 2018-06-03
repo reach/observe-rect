@@ -6,22 +6,19 @@ let observedNodes = new Map();
 let rafId;
 
 let run = () => {
-  observedNodes.forEach(state => {
-    if (state.hasRectChanged) {
-      state.callbacks.forEach(cb => cb(state.rect));
-      state.hasRectChanged = false;
+  const changedStates = []
+
+  observedNodes.forEach((state, node) => {
+    let newRect = node.getBoundingClientRect();
+    if (rectChanged(newRect, state.rect)) {
+      state.rect = newRect;
+      changedStates.push(state);
     }
   });
 
-  setTimeout(() => {
-    observedNodes.forEach((state, node) => {
-      let newRect = node.getBoundingClientRect();
-      if (rectChanged(newRect, state.rect)) {
-        state.hasRectChanged = true;
-        state.rect = newRect;
-      }
-    });
-  }, 0);
+  changedStates.forEach(state => {
+    state.callbacks.forEach(cb => cb(state.rect));
+  });
 
   rafId = requestAnimationFrame(run);
 };
@@ -35,7 +32,6 @@ export default (node, cb) => {
       } else {
         observedNodes.set(node, {
           rect: undefined,
-          hasRectChanged: false,
           callbacks: [cb]
         });
       }
