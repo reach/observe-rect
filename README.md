@@ -33,11 +33,17 @@ import observeRect from "@reach/observe-rect";
 let node = document.getElementById("some-node");
 
 let rectObserver = observeRect(node, rect => {
-  rect.left;
-  rect.top;
-  rect.height;
-  rect.width;
+  console.log("left", rect.left);
+  console.log("top", rect.top);
+  console.log("height", rect.height);
+  console.log("width", rect.width);
 });
+
+// start observing
+rectObserver.observe();
+
+// stop observing
+rectObserver.unobserve();
 ```
 
 ## About
