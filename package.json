@@ -16,7 +16,7 @@
   "umd:main": "dist/index.umd.js",
   "module": "dist/index.m.js",
   "source": "src/index.js",
-  "repository": "https://github.com/reach/rect-observer",
+  "repository": "https://github.com/reach/observe-rect",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
   "dependencies": {},
