@@ -4,7 +4,8 @@
   "description": "Observe the Rect of a DOM element.",
   "scripts": {
     "build": "microbundle",
-    "start": "microbundle watch"
+    "start": "microbundle watch",
+    "serve": "serve"
   },
   "files": [
     "src",
@@ -21,11 +22,11 @@
   "dependencies": {},
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
-    "eslint": "^4.19.1",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-jest": "^21.17.0",
-    "microbundle": "^0.4.4",
-    "serve": "^7.2.0"
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-jest": "^23.0.2",
+    "microbundle": "^0.11.0",
+    "serve": "^11.2.0"
   },
   "prettier": {}
 }
