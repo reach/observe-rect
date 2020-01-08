@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@reach/createRectObserver"><img src="https://img.shields.io/npm/v/@reach/createRectObserver.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@reach/createRectObserver"><img src="https://img.shields.io/npm/dm/@reach/createRectObserver.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@reach/observe-rect"><img src="https://img.shields.io/npm/v/@reach/observe-rect.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@reach/observe-rect"><img src="https://img.shields.io/npm/dm/@reach/observe-rect.svg?style=flat-square"></a>
 </p>
 
 <p align="center">
