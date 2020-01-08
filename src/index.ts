@@ -1,9 +1,17 @@
-let props = ["width", "height", "top", "right", "bottom", "left"];
+let props: (keyof Rect)[] = [
+  'bottom',
+  'height',
+  'left',
+  'right',
+  'top',
+  'width'
+];
 
-let rectChanged = (a = {}, b = {}) => props.some(prop => a[prop] !== b[prop]);
+let rectChanged = (a: PartialRect = {}, b: PartialRect = {}) =>
+  props.some(prop => a[prop] !== b[prop]);
 
-let observedNodes = new Map();
-let rafId;
+let observedNodes = new Map<HTMLElement, RectProps>();
+let rafId: number;
 
 let run = () => {
   observedNodes.forEach(state => {
@@ -26,12 +34,12 @@ let run = () => {
   rafId = requestAnimationFrame(run);
 };
 
-export default (node, cb) => {
+export default (node: HTMLElement, cb: Function) => {
   return {
     observe() {
       let wasEmpty = observedNodes.size === 0;
       if (observedNodes.has(node)) {
-        observedNodes.get(node).callbacks.push(cb);
+        observedNodes.get(node)!.callbacks.push(cb);
       } else {
         observedNodes.set(node, {
           rect: undefined,
@@ -57,4 +65,17 @@ export default (node, cb) => {
       }
     }
   };
+};
+
+export type Rect = Pick<
+  DOMRect,
+  'width' | 'height' | 'top' | 'right' | 'bottom' | 'left'
+>;
+
+export type PartialRect = Partial<Rect>;
+
+export type RectProps = {
+  rect: Rect | undefined;
+  hasRectChanged: boolean;
+  callbacks: Function[];
 };

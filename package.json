@@ -1,32 +1,55 @@
 {
   "name": "@reach/observe-rect",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Observe the Rect of a DOM element.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/observe-rect",
+    "directory": "packages/auto-id"
+  },
   "scripts": {
-    "build": "microbundle",
-    "start": "microbundle watch",
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd",
+    "start": "cross-env NODE_ENV=production tsdx watch",
     "serve": "serve"
   },
   "files": [
-    "src",
     "dist",
     "README.md"
   ],
   "main": "dist/index.js",
-  "umd:main": "dist/index.umd.js",
-  "module": "dist/index.m.js",
-  "source": "src/index.js",
-  "repository": "https://github.com/reach/observe-rect",
-  "author": "Ryan Florence <@ryanflorence>",
+  "umd:main": "dist/observe-rect.umd.production.js",
+  "module": "dist/observe-rect.esm.js",
+  "typings": "dist/index.d.ts",
+  "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@types/jest": "^24.0.25",
+    "babel-loader": "^8.0.6",
     "babel-preset-env": "^1.7.0",
-    "eslint": "^6.6.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-plugin-jest": "^23.0.2",
-    "microbundle": "^0.11.0",
-    "serve": "^11.2.0"
+    "cross-env": "^6.0.3",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-jest": "^23.3.0",
+    "eslint": "^6.8.0",
+    "husky": "^4.0.1",
+    "serve": "^11.2.0",
+    "ts-loader": "^6.2.1",
+    "tsdx": "^0.12.1",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.4"
   },
-  "prettier": {}
+  "eslintConfig": {
+    "extends": ["eslint:recommended", "prettier"],
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "env": {
+      "es6": true,
+      "browser": true
+    }
+  },  
+  "prettier": {
+    "singleQuote": true
+  }
 }

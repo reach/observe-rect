@@ -45,7 +45,7 @@ then open up <a style="color: white" href="http://localhost:5000/example.html">h
 
   </body>
   <script type="module">
-    import observeRect from './src/index.js'
+    import observeRect from './dist/observe-rect.esm.js'
     let observer = observeRect(demo, (rect) => {
       log.textContent = JSON.stringify(rect, null, 2)
     })
