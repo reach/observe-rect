@@ -1,4 +1,4 @@
-let props: (keyof Rect)[] = [
+let props: (keyof DOMRect)[] = [
   'bottom',
   'height',
   'left',
@@ -7,7 +7,7 @@ let props: (keyof Rect)[] = [
   'width'
 ];
 
-let rectChanged = (a: PartialRect = {}, b: PartialRect = {}) =>
+let rectChanged = (a: DOMRect = {} as DOMRect, b: DOMRect = {} as DOMRect) =>
   props.some(prop => a[prop] !== b[prop]);
 
 let observedNodes = new Map<HTMLElement, RectProps>();
@@ -21,7 +21,7 @@ let run = () => {
     }
   });
 
-  setTimeout(() => {
+  window.setTimeout(() => {
     observedNodes.forEach((state, node) => {
       let newRect = node.getBoundingClientRect();
       if (rectChanged(newRect, state.rect)) {
@@ -31,7 +31,7 @@ let run = () => {
     });
   }, 0);
 
-  rafId = requestAnimationFrame(run);
+  rafId = window.requestAnimationFrame(run);
 };
 
 export default (node: HTMLElement, cb: Function) => {
@@ -67,15 +67,10 @@ export default (node: HTMLElement, cb: Function) => {
   };
 };
 
-export type Rect = Pick<
-  DOMRect,
-  'width' | 'height' | 'top' | 'right' | 'bottom' | 'left'
->;
-
-export type PartialRect = Partial<Rect>;
+export type PartialRect = Partial<DOMRect>;
 
 export type RectProps = {
-  rect: Rect | undefined;
+  rect: DOMRect | undefined;
   hasRectChanged: boolean;
   callbacks: Function[];
 };
