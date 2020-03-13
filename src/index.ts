@@ -14,27 +14,26 @@ let observedNodes = new Map<HTMLElement, RectProps>();
 let rafId: number;
 
 let run = () => {
-  observedNodes.forEach(state => {
-    if (state.hasRectChanged) {
-      state.callbacks.forEach(cb => cb(state.rect));
-      state.hasRectChanged = false;
+  const changedStates: RectProps[] = [];
+  observedNodes.forEach((state, node) => {
+    let newRect = node.getBoundingClientRect();
+    if (rectChanged(newRect, state.rect)) {
+      state.rect = newRect;
+      changedStates.push(state);
     }
   });
 
-  window.setTimeout(() => {
-    observedNodes.forEach((state, node) => {
-      let newRect = node.getBoundingClientRect();
-      if (rectChanged(newRect, state.rect)) {
-        state.hasRectChanged = true;
-        state.rect = newRect;
-      }
-    });
-  }, 0);
+  changedStates.forEach(state => {
+    state.callbacks.forEach(cb => cb(state.rect));
+  });
 
   rafId = window.requestAnimationFrame(run);
 };
 
-export default (node: HTMLElement, cb: Function) => {
+export default function observeRect(
+  node: HTMLElement,
+  cb: (rect: DOMRect) => void
+) {
   return {
     observe() {
       let wasEmpty = observedNodes.size === 0;
@@ -65,7 +64,7 @@ export default (node: HTMLElement, cb: Function) => {
       }
     }
   };
-};
+}
 
 export type PartialRect = Partial<DOMRect>;
 
