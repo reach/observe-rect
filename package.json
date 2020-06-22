@@ -1,55 +1,53 @@
 {
-  "name": "@reach/observe-rect",
-  "version": "1.0.5",
-  "description": "Observe the Rect of a DOM element.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/reach/observe-rect",
-    "directory": "packages/auto-id"
-  },
-  "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd",
-    "start": "cross-env NODE_ENV=production tsdx watch",
-    "serve": "serve"
-  },
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "main": "dist/index.js",
-  "umd:main": "dist/observe-rect.umd.production.js",
-  "module": "dist/observe-rect.esm.js",
-  "typings": "dist/index.d.ts",
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@types/jest": "^24.0.25",
-    "babel-loader": "^8.0.6",
-    "babel-preset-env": "^1.7.0",
-    "cross-env": "^6.0.3",
-    "eslint-config-prettier": "^6.9.0",
-    "eslint-plugin-jest": "^23.3.0",
-    "eslint": "^6.8.0",
-    "husky": "^4.0.1",
-    "serve": "^11.2.0",
-    "ts-loader": "^6.2.1",
-    "tsdx": "^0.12.1",
-    "tslib": "^1.10.0",
-    "typescript": "^3.7.4"
-  },
-  "eslintConfig": {
-    "extends": ["eslint:recommended", "prettier"],
-    "parserOptions": {
-      "sourceType": "module"
-    },
-    "env": {
-      "es6": true,
-      "browser": true
-    }
-  },  
-  "prettier": {
-    "singleQuote": true
-  }
+	"name": "@reach/observe-rect",
+	"version": "1.2.0",
+	"description": "Observe the Rect of a DOM element.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/reach/observe-rect",
+		"directory": "packages/auto-id"
+	},
+	"scripts": {
+		"build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd",
+		"start": "cross-env NODE_ENV=development tsdx watch",
+		"test": "cross-env NODE_ENV=test tsdx test",
+		"serve": "serve"
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"main": "dist/index.js",
+	"umd:main": "dist/observe-rect.umd.production.js",
+	"module": "dist/observe-rect.esm.js",
+	"typings": "dist/index.d.ts",
+	"author": "React Training <hello@reacttraining.com>",
+	"license": "MIT",
+	"dependencies": {},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^3.3.0",
+		"@typescript-eslint/parser": "^3.3.0",
+		"babel-eslint": "^10.1.0",
+		"cross-env": "^7.0.2",
+		"eslint-plugin-import": "^2.21.2",
+		"eslint-plugin-jest": "^23.16.0",
+		"eslint": "^7.3.0",
+		"prettier": "^2.0.5",
+		"pretty-quick": "^2.0.1",
+		"husky": "^4.2.5",
+		"serve": "^11.3.2",
+		"tsdx": "^0.12.1",
+		"tslib": "^2.0.0",
+		"typescript": "^3.9.5"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "pretty-quick --staged"
+		}
+	},
+	"prettier": {
+		"semi": true,
+		"trailingComma": "es5",
+		"useTabs": true
+	}
 }
