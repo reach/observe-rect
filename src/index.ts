@@ -1,6 +1,6 @@
 type RectProps = {
 	rect: DOMRect;
-	callbacks: Function[];
+	callbacks: Set<Function>;
 };
 
 let COMPARE_KEYS = [
@@ -30,17 +30,17 @@ function assertDidUpdate(state: RectProps, node: Element){
 
 export default function observeRect(
 	node: Element,
-	cb: (rect: DOMRect) => void
+	callback: (rect: DOMRect) => void
 ) {
 	return {
 		observe() {
 			let wasEmpty = observedNodes.size === 0;
 			if (observedNodes.has(node)) {
-				observedNodes.get(node)!.callbacks.push(cb);
+				observedNodes.get(node)!.callbacks.add(callback);
 			} else {
 				observedNodes.set(node, {
 					rect: {} as any,
-					callbacks: [cb],
+					callbacks: new Set([callback]),
 				});
 			}
 			if (wasEmpty) {
@@ -52,12 +52,11 @@ export default function observeRect(
 		unobserve() {
 			let state = observedNodes.get(node);
 			if (state) {
-				// Remove the callback
-				const index = state.callbacks.indexOf(cb);
-				if (index >= 0) state.callbacks.splice(index, 1);
+				state.callbacks.delete(callback);
 
 				// Remove the node reference
-				if (!state.callbacks.length) observedNodes.delete(node);
+				if (!state.callbacks.size)
+					observedNodes.delete(node);
 
 				// Stop the loop
 				if (!observedNodes.size)
