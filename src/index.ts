@@ -8,22 +8,25 @@ let COMPARE_KEYS = [
 ] as const;
 
 let observedNodes = new Map<Element, RectProps>();
-let rafId: number;
+let active: boolean;
 
-let run = () => {
-	observedNodes.forEach((state, node) => {
-		let newRect = node.getBoundingClientRect();
-
-		for(const key of COMPARE_KEYS)
-			if(newRect[key] !== state.rect[key]){
-				state.rect = newRect;
-				state.callbacks.forEach(cb => cb(state.rect))
-				break;
-			}
-	});
-
-	rafId = window.requestAnimationFrame(run);
+function checkForUpdates(){
+	if(active){
+		observedNodes.forEach(assertDidUpdate);
+		window.requestAnimationFrame(checkForUpdates);
+	}
 };
+
+function assertDidUpdate(state: RectProps, node: Element){
+	let newRect = node.getBoundingClientRect();
+
+	for(const key of COMPARE_KEYS)
+		if(newRect[key] !== state.rect[key]){
+			state.rect = newRect;
+			state.callbacks.forEach(cb => cb(state.rect))
+			break;
+		}
+}
 
 export default function observeRect(
 	node: Element,
@@ -40,7 +43,10 @@ export default function observeRect(
 					callbacks: [cb],
 				});
 			}
-			if (wasEmpty) run();
+			if (wasEmpty) {
+				active = true;
+				checkForUpdates();
+			}
 		},
 
 		unobserve() {
@@ -54,7 +60,8 @@ export default function observeRect(
 				if (!state.callbacks.length) observedNodes.delete(node);
 
 				// Stop the loop
-				if (!observedNodes.size) cancelAnimationFrame(rafId);
+				if (!observedNodes.size)
+					active = false;
 			}
 		},
 	};
