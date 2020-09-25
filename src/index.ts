@@ -1,30 +1,20 @@
-let props: (keyof DOMRect)[] = [
-	"bottom",
-	"height",
-	"left",
-	"right",
-	"top",
-	"width",
-];
-
-let rectChanged = (a: DOMRect = {} as DOMRect, b: DOMRect = {} as DOMRect) =>
-	props.some((prop) => a[prop] !== b[prop]);
+let COMPARE_KEYS = [
+	"bottom", "height", "left", "right", "top", "width"
+] as const;
 
 let observedNodes = new Map<Element, RectProps>();
 let rafId: number;
 
 let run = () => {
-	const changedStates: RectProps[] = [];
 	observedNodes.forEach((state, node) => {
 		let newRect = node.getBoundingClientRect();
-		if (rectChanged(newRect, state.rect)) {
-			state.rect = newRect;
-			changedStates.push(state);
-		}
-	});
 
-	changedStates.forEach((state) => {
-		state.callbacks.forEach((cb) => cb(state.rect));
+		for(const key of COMPARE_KEYS)
+			if(newRect[key] !== (state.rect || {})[key]){
+				state.rect = newRect;
+				state.callbacks.forEach(cb => cb(state.rect))
+				break;
+			}
 	});
 
 	rafId = window.requestAnimationFrame(run);
