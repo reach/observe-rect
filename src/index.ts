@@ -1,3 +1,8 @@
+type RectProps = {
+	rect: DOMRect;
+	callbacks: Function[];
+};
+
 let COMPARE_KEYS = [
 	"bottom", "height", "left", "right", "top", "width"
 ] as const;
@@ -10,7 +15,7 @@ let run = () => {
 		let newRect = node.getBoundingClientRect();
 
 		for(const key of COMPARE_KEYS)
-			if(newRect[key] !== (state.rect || {})[key]){
+			if(newRect[key] !== state.rect[key]){
 				state.rect = newRect;
 				state.callbacks.forEach(cb => cb(state.rect))
 				break;
@@ -31,8 +36,7 @@ export default function observeRect(
 				observedNodes.get(node)!.callbacks.push(cb);
 			} else {
 				observedNodes.set(node, {
-					rect: undefined,
-					hasRectChanged: false,
+					rect: {} as any,
 					callbacks: [cb],
 				});
 			}
@@ -55,11 +59,3 @@ export default function observeRect(
 		},
 	};
 }
-
-export type PartialRect = Partial<DOMRect>;
-
-export type RectProps = {
-	rect: DOMRect | undefined;
-	hasRectChanged: boolean;
-	callbacks: Function[];
-};
