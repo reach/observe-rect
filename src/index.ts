@@ -1,75 +1,67 @@
-let props: (keyof DOMRect)[] = [
-	"bottom",
-	"height",
-	"left",
-	"right",
-	"top",
-	"width",
-];
+type RectProps = {
+  rect: DOMRect;
+  callbacks: Set<Function>;
+};
 
-let rectChanged = (a: DOMRect = {} as DOMRect, b: DOMRect = {} as DOMRect) =>
-	props.some((prop) => a[prop] !== b[prop]);
+let COMPARE_KEYS = [
+  "bottom", "height", "left", "right", "top", "width"
+] as const;
 
 let observedNodes = new Map<Element, RectProps>();
-let rafId: number;
+let active: boolean;
 
-let run = () => {
-	const changedStates: RectProps[] = [];
-	observedNodes.forEach((state, node) => {
-		let newRect = node.getBoundingClientRect();
-		if (rectChanged(newRect, state.rect)) {
-			state.rect = newRect;
-			changedStates.push(state);
-		}
-	});
-
-	changedStates.forEach((state) => {
-		state.callbacks.forEach((cb) => cb(state.rect));
-	});
-
-	rafId = window.requestAnimationFrame(run);
+function checkForUpdates(){
+  if(active){
+    observedNodes.forEach(assertDidUpdate);
+    window.requestAnimationFrame(checkForUpdates);
+  }
 };
 
-export default function observeRect(
-	node: Element,
-	cb: (rect: DOMRect) => void
-) {
-	return {
-		observe() {
-			let wasEmpty = observedNodes.size === 0;
-			if (observedNodes.has(node)) {
-				observedNodes.get(node)!.callbacks.push(cb);
-			} else {
-				observedNodes.set(node, {
-					rect: undefined,
-					hasRectChanged: false,
-					callbacks: [cb],
-				});
-			}
-			if (wasEmpty) run();
-		},
+function assertDidUpdate(state: RectProps, node: Element){
+  let newRect = node.getBoundingClientRect();
 
-		unobserve() {
-			let state = observedNodes.get(node);
-			if (state) {
-				// Remove the callback
-				const index = state.callbacks.indexOf(cb);
-				if (index >= 0) state.callbacks.splice(index, 1);
-
-				// Remove the node reference
-				if (!state.callbacks.length) observedNodes.delete(node);
-
-				// Stop the loop
-				if (!observedNodes.size) cancelAnimationFrame(rafId);
-			}
-		},
-	};
+  for(const key of COMPARE_KEYS)
+    if(newRect[key] !== state.rect[key]){
+      state.rect = newRect;
+      state.callbacks.forEach(cb => cb(state.rect))
+      break;
+    }
 }
 
-export type PartialRect = Partial<DOMRect>;
+export default function observeRect(
+  node: Element,
+  callback: (rect: DOMRect) => void
+){
+  let state = observedNodes.get(node);
 
-export type RectProps = {
-	rect: DOMRect | undefined;
-	hasRectChanged: boolean;
-	callbacks: Function[];
-};
+  return {
+    observe(){
+      if(state)
+        state.callbacks.add(callback);
+      else {
+        observedNodes.set(node, state = {
+          rect: {} as any,
+          callbacks: new Set([callback]),
+        });
+
+        if(!active){
+          active = true;
+          checkForUpdates();
+        }
+      }
+    },
+    unobserve(){
+      if(state){
+        state.callbacks.delete(callback);
+
+        if(!state.callbacks.size)
+          observedNodes.delete(node);
+
+        state = undefined;
+
+        if(!observedNodes.size)
+          active = false;
+      }
+    }
+  }
+}
