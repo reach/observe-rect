@@ -31,37 +31,37 @@ function assertDidUpdate(state: RectProps, node: Element){
 export default function observeRect(
 	node: Element,
 	callback: (rect: DOMRect) => void
-) {
+){
+	let state = observedNodes.get(node);
+
 	return {
-		observe() {
-			let wasEmpty = observedNodes.size === 0;
-			if (observedNodes.has(node)) {
-				observedNodes.get(node)!.callbacks.add(callback);
-			} else {
-				observedNodes.set(node, {
+		observe(){
+			if(state)
+				state.callbacks.add(callback);
+			else {
+				observedNodes.set(node, state = {
 					rect: {} as any,
 					callbacks: new Set([callback]),
 				});
-			}
-			if (wasEmpty) {
-				active = true;
-				checkForUpdates();
+		
+				if(!active){
+					active = true;
+					checkForUpdates();
+				}
 			}
 		},
-
-		unobserve() {
-			let state = observedNodes.get(node);
-			if (state) {
+		unobserve(){
+			if(state){
 				state.callbacks.delete(callback);
-
-				// Remove the node reference
-				if (!state.callbacks.size)
+	
+				if(!state.callbacks.size)
 					observedNodes.delete(node);
-
-				// Stop the loop
-				if (!observedNodes.size)
+	
+				state = undefined;
+	
+				if(!observedNodes.size)
 					active = false;
 			}
-		},
-	};
+		}
+	}
 }
